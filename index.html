@@ -216,7 +216,7 @@ nav {
 
 /* Hero right panel */
 .hero-right {
-  background: #eef3fb;
+  background: var(--ink);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -232,13 +232,13 @@ nav {
   top: -100px; right: -100px;
   width: 400px; height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(42,95,200,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(200,81,42,0.15) 0%, transparent 70%);
 }
 .hero-right-tag {
   font-size: 10px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(255,255,255,0.3);
   margin-bottom: 48px;
 }
 .stat-block { margin-bottom: 40px; }
@@ -246,14 +246,14 @@ nav {
   font-family: 'Playfair Display', serif;
   font-size: 56px;
   font-weight: 900;
-  color: var(--ink);
+  color: white;
   line-height: 1;
   margin-bottom: 4px;
 }
 .stat-number span { color: var(--accent); }
 .stat-desc {
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255,255,255,0.4);
   letter-spacing: 0.05em;
   font-weight: 300;
 }
@@ -264,12 +264,12 @@ nav {
   font-size: 11px;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: rgba(255,255,255,0.3);
   margin-top: 48px;
 }
 .scroll-line {
   width: 40px; height: 1px;
-  background: var(--border-dark);
+  background: rgba(255,255,255,0.2);
   position: relative;
   overflow: hidden;
 }
@@ -670,7 +670,7 @@ footer {
 .reveal-delay-4 { transition-delay: 0.4s; }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   nav { padding: 16px 24px; }
   .nav-links { display: none; }
   #hero { grid-template-columns: 1fr; }
@@ -683,7 +683,7 @@ footer {
   .projects-grid { grid-template-columns: 1fr; }
   .edu-grid { grid-template-columns: 1fr; }
   footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
-  .cursor, .cursor-ring, .cursor-ring2 { display: none; }
+  .cursor, .cursor-ring { display: none; }
   body { cursor: auto; }
 }
 @media (max-width: 640px) {
@@ -776,9 +776,9 @@ footer {
           leetcode.com/u/sameerjha462000
           <span class="contact-arrow">↗</span>
         </a>
-        <a href="/cdn-cgi/l/email-protection#94f5f6fcfde7fcf1fffefcf5a5a4a4a3a5ada3a3d4f3f9f5fdf8baf7fbf9" class="contact-item">
+        <a href="mailto:abhishekjha10071977@gmail.com" class="contact-item">
           <span class="contact-icon">@</span>
-          <span class="__cf_email__" data-cfemail="48292a20213b202d232220297978787f79717f7f082f25292124662b2725">[email&#160;protected]</span>
+          abhishekjha10071977@gmail.com
           <span class="contact-arrow">↗</span>
         </a>
         <a href="tel:+352661462000" class="contact-item">
@@ -980,8 +980,8 @@ footer {
   </div>
   <div class="contact-big reveal reveal-delay-1">
     <div class="contact-big-label">Send me a message</div>
-    <a href="/cdn-cgi/l/email-protection#82e3e0eaebf1eae7e9e8eae3b3b2b2b5b3bbb5b5c2e5efe3ebeeace1edef" class="contact-big-email">
-      <span class="__cf_email__" data-cfemail="e382818b8a908b8688898b82d2d3d3d4d2dad4d4a3848e828a8fcd808c8e">[email&#160;protected]</span>
+    <a href="mailto:abhishekjha10071977@gmail.com" class="contact-big-email">
+      abhishekjha10071977@gmail.com
     </a>
     <div class="contact-social">
       <a href="https://www.linkedin.com/in/abhishekjha462000/" target="_blank" class="social-btn">LinkedIn</a>
@@ -996,7 +996,7 @@ footer {
   <span>Data Analyst · University of Luxembourg</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Canvas trail setup
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
@@ -1041,3 +1041,17 @@ const observer = new IntersectionObserver(entries => {
 reveals.forEach(el => observer.observe(el));
 
 // Nav active state on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? 'var(--ink)' : '';
+  });
+});
+</script>
+</body>
+</html>
