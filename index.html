@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Abhishek Jha — Data Analyst</title>
+<title>Abhishek Jha, Data Analyst</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -34,28 +34,39 @@ body {
 
 /* CUSTOM CURSOR */
 .cursor {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   background: var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background 0.2s;
+  transition: width 0.15s, height 0.15s, background 0.2s;
+  mix-blend-mode: multiply;
 }
 .cursor-ring {
-  width: 32px; height: 32px;
+  width: 36px; height: 36px;
   border: 1.5px solid var(--accent);
   border-radius: 50%;
   position: fixed;
   pointer-events: none;
   z-index: 9998;
   transform: translate(-50%, -50%);
-  transition: all 0.12s ease;
-  opacity: 0.6;
+  opacity: 0.5;
 }
-body:has(a:hover) .cursor { width: 12px; height: 12px; background: var(--ink); }
-body:has(a:hover) .cursor-ring { width: 48px; height: 48px; opacity: 0.3; }
+.cursor-ring2 {
+  width: 64px; height: 64px;
+  border: 1px solid rgba(200,81,42,0.2);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9996;
+  transform: translate(-50%, -50%);
+  opacity: 0.4;
+}
+body:has(a:hover) .cursor { width: 10px; height: 10px; background: var(--ink); }
+body:has(a:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--ink); opacity: 0.2; }
+body:has(a:hover) .cursor-ring2 { width: 80px; height: 80px; }
 
 /* NAV */
 nav {
@@ -688,6 +699,8 @@ footer {
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+<div class="cursor-ring2" id="cursorRing2"></div>
+<canvas id="trailCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9997;"></canvas>
 
 <nav>
   <div class="nav-logo">Abhishek <span>Jha</span></div>
@@ -707,7 +720,7 @@ footer {
   <div class="hero-left">
     <div class="hero-eyebrow">
       <span class="hero-eyebrow-dot"></span>
-      Data Analyst &amp; MSc Student — Luxembourg
+      Data Analyst &amp; MSc Student, Luxembourg
     </div>
     <h1 class="hero-name">Abhishek<br/><span class="hero-name-italic">Jha.</span></h1>
     <p class="hero-title">Turning messy data into systems that work.</p>
@@ -747,7 +760,7 @@ footer {
   </div>
   <div class="about-layout">
     <div class="about-body reveal reveal-delay-1">
-      <p>I spent three years as a Data Analyst at <strong>Ernst &amp; Young LLP</strong> in India, working on the Ayushman Bharat Digital Mission — one of India's largest national healthcare initiatives. Day to day I was writing Python and SQL scripts, building Power BI dashboards for contact centre operations, and developing Flask APIs that connected healthcare platforms in real time.</p>
+      <p>I spent three years as a Data Analyst at <strong>Ernst &amp; Young LLP</strong> in India, working on the Ayushman Bharat Digital Mission, one of India's largest national healthcare initiatives. Day to day I was writing Python and SQL scripts, building Power BI dashboards for contact centre operations, and developing Flask APIs that connected healthcare platforms in real time.</p>
       <p>I am currently doing a <strong>Masters in Mathematical Modelling and Computational Sciences</strong> at the University of Luxembourg, deepening my background in mathematics and machine learning while looking for opportunities to apply my skills here in Luxembourg.</p>
       <p>I like problems where data is messy, the process is manual, and there is room to build something better.</p>
     </div>
@@ -857,7 +870,7 @@ footer {
 
   <div class="exp-item reveal">
     <div class="exp-meta">
-      <div class="exp-period">Jul 2022 — Aug 2025</div>
+      <div class="exp-period">Jul 2022 to Aug 2025</div>
       <br/>
       <span class="exp-company-tag">Ernst &amp; Young LLP</span>
     </div>
@@ -875,7 +888,7 @@ footer {
 
   <div class="exp-item reveal">
     <div class="exp-meta">
-      <div class="exp-period">Nov 2020 — Mar 2021</div>
+      <div class="exp-period">Nov 2020 to Mar 2021</div>
       <br/>
       <span class="exp-company-tag">INeuron</span>
     </div>
@@ -933,13 +946,13 @@ footer {
       <div class="edu-badge">Masters Degree</div>
       <div class="edu-school">University of Luxembourg</div>
       <div class="edu-field">Mathematical Modelling &amp; Computational Sciences</div>
-      <div class="edu-period">Sep 2025 — Present &nbsp;·&nbsp; Luxembourg</div>
+      <div class="edu-period">Sep 2025 to Present &nbsp;·&nbsp; Luxembourg</div>
     </div>
     <div class="edu-card reveal reveal-delay-1">
       <div class="edu-badge">Bachelor of Engineering</div>
       <div class="edu-school">Delhi Technological University</div>
       <div class="edu-field">Mathematics and Computing</div>
-      <div class="edu-period">Aug 2018 — Aug 2022 &nbsp;·&nbsp; Delhi, India</div>
+      <div class="edu-period">Aug 2018 to Aug 2022 &nbsp;·&nbsp; Delhi, India</div>
     </div>
   </div>
 </section>
@@ -951,7 +964,7 @@ footer {
       <div class="section-eyebrow">Resume</div>
       <h2>Download My <em>CV</em></h2>
       <p style="font-family:'Crimson Pro',serif; font-size:18px; font-weight:300; color:var(--muted); line-height:1.8; margin-top:20px; max-width:440px;">
-        A full overview of my experience, education, and technical skills — available as a PDF.
+        A full overview of my experience, education, and technical skills, available as a PDF.
       </p>
     </div>
     <div class="reveal reveal-delay-1" style="display:flex; flex-direction:column; gap:16px; align-items:flex-start;">
@@ -989,25 +1002,93 @@ footer {
 </footer>
 
 <script>
-// Custom cursor
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX; mouseY = e.clientY;
-  cursor.style.left = mouseX + 'px';
-  cursor.style.top = mouseY + 'px';
+// Canvas trail setup
+const canvas = document.getElementById('trailCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
 
-function animateRing() {
-  ringX += (mouseX - ringX) * 0.12;
-  ringY += (mouseY - ringY) * 0.12;
-  ring.style.left = ringX + 'px';
-  ring.style.top = ringY + 'px';
-  requestAnimationFrame(animateRing);
+// Cursor elements
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+const ring2 = document.getElementById('cursorRing2');
+
+let mouseX = 0, mouseY = 0;
+let r1x = 0, r1y = 0;
+let r2x = 0, r2y = 0;
+
+// Trail particles
+const particles = [];
+const ACCENT = '200,81,42';
+
+class Particle {
+  constructor(x, y) {
+    this.x = x; this.y = y;
+    this.size = Math.random() * 3 + 1;
+    this.alpha = 0.6;
+    this.decay = Math.random() * 0.015 + 0.01;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+  }
+  update() {
+    this.alpha -= this.decay;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.size *= 0.97;
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${ACCENT},${this.alpha})`;
+    ctx.fill();
+  }
 }
-animateRing();
+
+let lastParticleX = 0, lastParticleY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px';
+  cursor.style.top = mouseY + 'px';
+
+  // Spawn particles only if mouse moved enough
+  const dist = Math.hypot(mouseX - lastParticleX, mouseY - lastParticleY);
+  if (dist > 6) {
+    for (let i = 0; i < 2; i++) particles.push(new Particle(mouseX, mouseY));
+    lastParticleX = mouseX;
+    lastParticleY = mouseY;
+  }
+});
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Update & draw particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    particles[i].update();
+    particles[i].draw();
+    if (particles[i].alpha <= 0) particles.splice(i, 1);
+  }
+
+  // Rings follow with different lag
+  r1x += (mouseX - r1x) * 0.13;
+  r1y += (mouseY - r1y) * 0.13;
+  ring.style.left = r1x + 'px';
+  ring.style.top = r1y + 'px';
+
+  r2x += (mouseX - r2x) * 0.07;
+  r2y += (mouseY - r2y) * 0.07;
+  ring2.style.left = r2x + 'px';
+  ring2.style.top = r2y + 'px';
+
+  requestAnimationFrame(animate);
+}
+animate();
 
 // Scroll reveal
 const reveals = document.querySelectorAll('.reveal');
