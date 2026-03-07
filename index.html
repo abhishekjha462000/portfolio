@@ -36,6 +36,7 @@
             color: var(--text);
             overflow-x: hidden;
             line-height: 1.6;
+            cursor: none;
         }
 
         /* Noise texture overlay */
@@ -233,7 +234,7 @@
             font-size: 0.93rem;
             transition: all 0.3s ease;
             border: none;
-            cursor: pointer;
+            cursor: none;
             font-family: 'DM Sans', sans-serif;
             letter-spacing: 0.01em;
         }
@@ -575,7 +576,7 @@
             border: 1px solid var(--border);
             box-shadow: var(--card-shadow);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
+            cursor: none;
             position: relative;
             overflow: hidden;
         }
@@ -799,7 +800,7 @@
             color: var(--text-dim);
             width: 36px; height: 36px;
             border-radius: 50%;
-            cursor: pointer;
+            cursor: none;
             font-size: 0.9rem;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.2s;
@@ -896,25 +897,61 @@
             .resume-actions { flex-direction: column; }
         }
 
-        /* Cursor trail */
+        /* ── CURSOR: dot + 2 rings ── */
         .cursor-dot {
             position: fixed;
             pointer-events: none;
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             background: var(--amber);
             border-radius: 50%;
             z-index: 9999;
-            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
             mix-blend-mode: multiply;
+            transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
         }
-        .cursor-ring {
+
+        /* Inner ring — smaller, faster lag */
+        .cursor-ring-1 {
             position: fixed;
             pointer-events: none;
-            width: 32px; height: 32px;
-            border: 2px solid rgba(59,125,216,0.4);
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(59, 125, 216, 0.55);
             border-radius: 50%;
-            z-index: 9998;
-            transition: transform 0.25s ease, width 0.25s, height 0.25s, border-color 0.25s;
+            z-index: 9997;
+            transform: translate(-50%, -50%);
+            transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease;
+        }
+
+        /* Outer ring — larger, slower lag */
+        .cursor-ring-2 {
+            position: fixed;
+            pointer-events: none;
+            width: 58px;
+            height: 58px;
+            border: 1.5px solid rgba(232, 148, 58, 0.3);
+            border-radius: 50%;
+            z-index: 9996;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+        }
+
+        /* Hover state expansions */
+        body.cursor-hover .cursor-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--sky);
+        }
+        body.cursor-hover .cursor-ring-1 {
+            width: 46px;
+            height: 46px;
+            border-color: rgba(59, 125, 216, 0.7);
+        }
+        body.cursor-hover .cursor-ring-2 {
+            width: 76px;
+            height: 76px;
+            border-color: rgba(232, 148, 58, 0.5);
         }
     </style>
 </head>
@@ -924,8 +961,11 @@
 <div class="blob blob-1"></div>
 <div class="blob blob-2"></div>
 <div class="blob blob-3"></div>
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Custom cursor elements -->
+<div class="cursor-dot"   id="cursorDot"></div>
+<div class="cursor-ring-1" id="cursorRing1"></div>
+<div class="cursor-ring-2" id="cursorRing2"></div>
 
 <!-- NAV -->
 <header>
@@ -952,7 +992,7 @@
             <div class="hero-content">
                 <div class="hero-badge"><span class="badge-dot"></span> Open to Internships in Luxembourg</div>
                 <h1>Abhishek <span class="highlight">Jha</span></h1>
-                <div class="hero-role"><strong>Data Analyst</strong> · MSc Mathematical Modelling</div>
+                <div class="hero-role"><strong>Data Analyst</strong> · MS Mathematical Modelling &amp; Coomputational Sciences</div>
                 <p>3+ years at Ernst &amp; Young automating data pipelines, building dashboards, and processing 1M+ records for India's national healthcare mission. Now deepening the mathematical foundations at the University of Luxembourg.</p>
                 <div class="hero-buttons">
                     <a href="#contact" class="btn btn-primary">Get In Touch →</a>
@@ -1176,7 +1216,7 @@
             </div>
             <div class="edu-card">
                 <span class="edu-icon">🏛️</span>
-                <h3>BE Mathematics and Computing</h3>
+                <h3>BTech Mathematics and Computing</h3>
                 <div class="institution">Delhi Technological University</div>
                 <span class="edu-year">Aug 2018 – Aug 2022</span>
             </div>
@@ -1332,7 +1372,56 @@ function closeModal(e) {
     }
 }
 
-// Scroll animations
+// ── DUAL-RING CURSOR ──────────────────────────────────────────────────────────
+const cursorDot   = document.getElementById('cursorDot');
+const cursorRing1 = document.getElementById('cursorRing1');
+const cursorRing2 = document.getElementById('cursorRing2');
+
+// Live mouse position
+let mx = 0, my = 0;
+
+// Separate lagged positions for each ring
+let r1x = 0, r1y = 0;  // inner ring  — faster (higher easing factor)
+let r2x = 0, r2y = 0;  // outer ring  — slower (lower easing factor)
+
+const EASE_RING1 = 0.14;   // snappier
+const EASE_RING2 = 0.055;  // lazier / more trailing
+
+document.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    // Dot follows instantly
+    cursorDot.style.left = mx + 'px';
+    cursorDot.style.top  = my + 'px';
+});
+
+(function animateRings() {
+    // Lerp each ring toward the mouse at its own speed
+    r1x += (mx - r1x) * EASE_RING1;
+    r1y += (my - r1y) * EASE_RING1;
+
+    r2x += (mx - r2x) * EASE_RING2;
+    r2y += (my - r2y) * EASE_RING2;
+
+    cursorRing1.style.left = r1x + 'px';
+    cursorRing1.style.top  = r1y + 'px';
+
+    cursorRing2.style.left = r2x + 'px';
+    cursorRing2.style.top  = r2y + 'px';
+
+    requestAnimationFrame(animateRings);
+})();
+
+// Hover expansion — toggle a class on body for clean CSS control
+const hoverTargets = document.querySelectorAll(
+    'a, button, .project-card, .skill-card, .edu-card, .timeline-card, .modal-close'
+);
+hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ── SCROLL ANIMATIONS ─────────────────────────────────────────────────────────
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
 }, { threshold: 0.08, rootMargin: '0px 0px -80px 0px' });
@@ -1345,23 +1434,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         const t = document.querySelector(this.getAttribute('href'));
         if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-});
-
-// Custom cursor
-const dot = document.getElementById('cursorDot');
-const ring = document.getElementById('cursorRing');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; dot.style.left = mx - 4 + 'px'; dot.style.top = my - 4 + 'px'; });
-(function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx - 16 + 'px';
-    ring.style.top = ry - 16 + 'px';
-    requestAnimationFrame(animRing);
-})();
-document.querySelectorAll('a, button, .project-card, .skill-card, .edu-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { ring.style.width = '52px'; ring.style.height = '52px'; ring.style.borderColor = 'rgba(232,148,58,0.5)'; });
-    el.addEventListener('mouseleave', () => { ring.style.width = '32px'; ring.style.height = '32px'; ring.style.borderColor = 'rgba(59,125,216,0.4)'; });
 });
 
 // Number counter animation
