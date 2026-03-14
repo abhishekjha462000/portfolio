@@ -1,6 +1,6 @@
 # Abhishek Jha — Portfolio
 
-Personal portfolio website built with HTML, CSS, and vanilla JavaScript. Live at [abhishekjha462000.github.io](https://abhishekjha462000.github.io).
+Personal portfolio website built with HTML, CSS, and vanilla JavaScript. Live at [abhishekjha462000.github.io](https://abhishekjha462000.github.io/portfolio).
 
 ## About
 
